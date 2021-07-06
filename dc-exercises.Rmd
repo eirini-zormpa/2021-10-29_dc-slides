@@ -1,0 +1,412 @@
+---
+title: "Day 4: Data Viz and R Markdown"
+subtitle: "Data Carpentries for Social Sciences"  
+institute: Leiden University & TU Delft
+date: '2021-07-08 *(Updated: `r Sys.Date()`)*'
+output:
+  xaringan::moon_reader:
+    css: xaringan-themer.css
+    nature:
+      slideNumberFormat: "%current%"
+      highlightStyle: github
+      highlightLines: true
+      countIncrementalSlides: true
+---
+
+```{r setup, include=FALSE}
+options(htmltools.dir.version = FALSE)
+knitr::opts_chunk$set(
+  #fig.width=9, fig.height=3.5, fig.retina=3,
+  out.width = "100%",
+  cache = FALSE,
+  echo = TRUE,
+  message = FALSE, 
+  warning = FALSE,
+  hiline = TRUE
+)
+library(tidyverse)
+library(here)
+interviews_plotting <- readr::read_csv(here("data", "interviews_plotting.csv"))
+percent_items <- interviews_plotting %>% 
+    group_by(village) %>%
+    summarize(across(bicycle:no_listed_items, ~ sum(.x) / n() * 100)) %>% 
+    pivot_longer(bicycle:no_listed_items, names_to = "items", values_to = "percent")
+```
+
+```{r xaringan-themer, include=FALSE, warning=FALSE}
+# uses my fork of the xaringanthemer package to left-align code chunks by default
+#devtools::install_github("bbartholdy/xaringanthemer") 
+library(xaringanthemer)
+style_duo(
+  primary_color = "#1F4257",
+  secondary_color = "#F97B64",
+  text_bold_color = "#d4d640", 
+  code_inline_color = "#29e6a4"
+)
+```
+
+class: center, middle, inverse
+
+## Data Visualisation
+
+---
+class: center, middle
+
+## Why ggplot2?
+
+...because these are 'base' plots
+
+.pull-left[
+```{r base-pl-1}
+plot(number_items ~ no_membrs, 
+     interviews_plotting, 
+     col = "blue")
+```
+]
+
+.pull-right[
+```{r base-pl-2}
+boxplot(rooms ~ village, 
+        interviews_plotting, 
+        col = c("blue", "green", "red"))
+```
+]
+
+---
+class: center, middle
+
+...and these are ggplots `r emo::ji("sunglasses")`
+
+.pull-left[
+```{r ggplot-1}
+interviews_plotting %>% 
+   ggplot(aes(x = no_membrs, y = number_items, color = village)) +
+      geom_count() +
+      theme_bw() +
+      labs(x = "Number of items", 
+           y = "Number of members in a household")
+```
+]
+
+.pull-right[
+```{r ggplot-2}
+interviews_plotting %>%
+  ggplot(aes(x = village, y = rooms, fill = village)) +
+    geom_boxplot() +
+    theme_minimal() +
+    theme(legend.position = "none",
+        panel.grid.major.x = element_blank())
+```
+]
+
+---
+class: center, middle
+
+.pull-left[
+<img src="./dc-exercises_files/figure-html/base-pl-1-1.png" width="80%"/>
+
+<img src="./dc-exercises_files/figure-html/base-pl-2-1.png" width="80%"/>
+]
+
+.pull-right[
+<img src="./dc-exercises_files/figure-html/ggplot-1-1.png" width="80%"/>
+
+<img src="./dc-exercises_files/figure-html/ggplot-2-1.png" width="80%"/>
+]
+
+---
+class: center, middle
+
+## ggplot2
+
+![](https://raw.githubusercontent.com/tidyverse/ggplot2/master/pkgdown/favicon/apple-touch-icon-120x120.png)
+
+[**ggplot2**](https://ggplot2.tidyverse.org/) is a package (included in **tidyverse**) for creating highly customisable plots that are built
+step-by-step by adding layers.
+
+The separation of a plot into layers allows a high degree of flexibility with
+minimal effort.
+
+---
+class: center, middle
+
+```r
+<DATA> %>%
+    ggplot(aes(<MAPPINGS>)) +
+    <GEOM_FUNCTION>() +
+    <CUSTOMISATION>
+```
+<a href="https://github.com/allisonhorst/stats-illustrations">
+<img src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/ggplot2_masterpiece.png" height=450 />
+</a>
+
+More artwork by [Allison Horst](https://github.com/allisonhorst/stats-illustrations)
+
+---
+class: center, middle, inverse
+
+## Data Visualisation Exercises
+
+---
+class: center, middle
+
+## Exercise 1
+
+`r emo::ji("clock")` **10 mins**
+
+Create a scatter plot of `rooms` by `village` with the `respondant_wall_type`
+showing in different colours. 
+
+Does this seem like a good way to display the relationship between these variables?
+
+What other kinds of plots might you use to show this type of data?
+
+`r countdown::countdown(minutes = 10, color_running_background  = "lightgreen", color_running_text = "black", color_finished_background = "red", color_finished_text =  "grey30")`
+
+---
+class: center, middle, inverse
+
+## Exercise 1: Solution
+
+```{r exercise-1-sol, fig.width=9, fig.height=3.5, fig.retina=3}
+interviews_plotting %>%
+    ggplot(aes(x = village, y = rooms)) +
+    geom_jitter(aes(color = respondent_wall_type),
+		    alpha = 0.5, width = 0.2, height = 0.2)
+```
+
+It is difficult to distinguish between villages and see patterns, right?
+
+Suggestions to improve this?
+
+---
+class: center, middle
+
+## Exercise 2
+
+`r emo::ji("clock")` **5 mins**
+
+Boxplots are useful summaries, but hide the shape of the distribution. For example,
+if the distribution is bimodal, we would not see it in a boxplot.
+
+Replace the box plot with a violin plot  
+see `geom_violin()`
+
+`r countdown::countdown(minutes = 5, color_running_background  = "lightgreen", color_running_text = "black", color_finished_background = "red", color_finished_text =  "grey30")`
+
+---
+class: center, middle, inverse
+
+## Exercise 2: Solution
+
+```{r exercise-2-sol, fig.width=9, fig.height=3.5, fig.retina=3}
+interviews_plotting %>%
+  ggplot(aes(x = respondent_wall_type, y = rooms)) +
+  geom_violin(alpha = 0) +
+  geom_jitter(alpha = 0.5, color = "tomato")
+```
+
+---
+class: center, middle
+
+## Exercise 3
+
+`r emo::ji("clock")` **10 mins**
+
+Create a bar plot showing the proportion of respondents in each village who are 
+or are not part of an irrigation association (`memb_assoc`). 
+
+Include only respondents who answered that question in the calculations and plot.
+
+Which village had the lowest proportion of respondents in an irrigation association?
+
+`r countdown::countdown(minutes = 10, color_running_background  = "lightgreen", color_running_text = "black", color_finished_background = "red", color_finished_text =  "grey30")`
+
+--
+
+### Hint
+
+```{r exercise-3-hint}
+percent_memb_assoc <- interviews_plotting %>%
+  filter(!is.na(memb_assoc)) %>%
+  count(village, memb_assoc) %>%
+  group_by(village) %>%
+  mutate(percent = (n / sum(n)) * 100) %>%
+  ungroup()
+```
+
+---
+class: center, middle, inverse
+
+## Exercise 3: Solution
+
+```{r exercise-3-sol, fig.width=7, fig.height=2.5, fig.retina=3}
+percent_memb_assoc <- interviews_plotting %>%
+  filter(!is.na(memb_assoc)) %>%
+  count(village, memb_assoc) %>%
+  group_by(village) %>%
+  mutate(percent = (n / sum(n)) * 100) %>%
+  ungroup()
+
+percent_memb_assoc %>%
+   ggplot(aes(x = village, y = percent, fill = memb_assoc)) +
+    geom_bar(stat = "identity", position = "dodge")
+```
+
+---
+class: center, middle
+
+## Exercise 4
+
+`r emo::ji("clock")` **5 mins**
+
+Experiment with at least two different themes. Build the previous plot using each
+of those themes. 
+
+Which do you like best?
+
+`r countdown::countdown(minutes = 5, color_running_background  = "lightgreen", color_running_text = "black", color_finished_background = "red", color_finished_text =  "grey30")`
+
+--
+
+### Hint
+
+.pull-left[
+`theme_minimal`  
+`theme_void`  
+`theme_classic`  
+]
+.pull-right[
+`theme_dark`  
+`theme_grey`  
+`theme_light`
+]
+---
+class: center, middle, inverse
+
+## Exercise 4: Solution
+
+```{r exercise-4-sol, eval=FALSE}
+percent_items %>%
+    ggplot(aes(x = village, y = percent)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    facet_wrap(~ items) +
+    theme_bw() + #<<
+    theme(panel.grid = element_blank())
+```
+
+
+<img src="https://media.giphy.com/media/43xU2PKxB9AUm5Z4C1/giphy.gif" align="center" height=300 />
+
+---
+class: center, middle, inverse
+
+## R Markdown
+
+---
+class: center, middle
+
+## Why R Markdown?
+
+R Markdown allows you to seamlessly combine executable R code, its output, 
+and text in a single document. 
+
+These documents can be readily converted to multiple static and dynamic output
+formats, including PDF (.pdf), Word (.docx), and HTML (.html).
+
+The benefit of a well-prepared R Markdown document is full reproducibility. 
+
+<a href="https://github.com/allisonhorst/stats-illustrations">
+<img src="https://raw.githubusercontent.com/allisonhorst/stats-illustrations/master/rstats-artwork/reproducibility_court.png" height=300 />
+</a>
+
+---
+class: center, middle
+
+## Why R Markdown?
+
+Full reproducibility also means that, if you notice a data transcription error, 
+or you are able to add more data to your analysis, you will be able to recompile
+the report without making any changes in the actual document.
+
+<img src="https://media.giphy.com/media/Vhk9HwPx3TO0w/giphy.gif" height=300 />
+
+
+---
+class: center, middle, inverse
+
+## R Markdown Exercises
+
+---
+class: center, middle
+
+## Exercise 5
+
+`r emo::ji("clock")` **5 mins**
+
+Play around with the different options in the chunk with the code for the table,
+and re-Knit to see what each option does to the output.
+
+What happens if you use `eval=FALSE` and `echo=FALSE`? 
+
+What is the difference between this and `include=FALSE`?
+
+`r countdown::countdown(minutes = 5, color_running_background  = "lightgreen", color_running_text = "black", color_finished_background = "red", color_finished_text =  "grey30")`
+
+---
+class: center, middle, inverse
+
+## Exercise 5: Solution
+
+Create a chunk with `eval=FALSE, echo=FALSE`
+
+then create another chunk with `include=FALSE` to compare. 
+
+`eval=FALSE, echo=FALSE` will neither run the code in the chunk, nor show the
+code in the knitted document. The code chunk essentially doesn’t exist in the
+knitted document...
+
+...whereas `include=FALSE` will run the code and store the output for later use.
+
+---
+class: center, middle
+
+## Exercise 6
+
+`r emo::ji("clock")` **10 mins**
+
+Create a new code chunk for the plot, and copy the code from any of the plots we
+created in the previous episode to produce a plot in the chunk,  
+and use your
+newly acquired customisation skills to make it look really nice!
+
+If you are feeling adventurous, you can also create a new plot with the
+`interviews_plotting` data frame.
+
+Feel free to post screenshots of your masterpiece in the [Google Doc](https://docs.google.com/document/d/1htdsH-Vx2ujGdehn0HW5ua00JHqwUprtqCbdBzLYr0o/edit#)
+
+`r countdown::countdown(minutes = 10, color_running_background  = "lightgreen", color_running_text = "black", color_finished_background = "red", color_finished_text =  "grey30")`
+
+---
+class: middle, inverse
+
+## Exercise 6: Solution
+
+```{r exercise-6-setup, echo=FALSE}
+percent_wall_type <- interviews_plotting %>%
+    filter(respondent_wall_type != "cement") %>%
+    count(village, respondent_wall_type) %>%
+    group_by(village) %>%
+    mutate(percent = (n / sum(n)) * 100) %>%
+    ungroup()
+```
+
+
+```{r exercise-6-sol, fig.width=9, fig.height=3.5, fig.retina=3}
+percent_wall_type %>%
+    ggplot(aes(x = village, y = percent, fill = respondent_wall_type)) +
+    geom_bar(stat = "identity", position = "dodge") +
+    theme_classic() +
+    scale_fill_viridis_d() # add colourblind-friendly palette
+```
+
