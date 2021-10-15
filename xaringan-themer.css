@@ -47,7 +47,7 @@
   --header-color: #F97B64;
   --background-color: #1F4257;
   --link-color: #F97B64;
-  --text-bold-color: #d4d640;
+  --text-bold-color: #F97B64;
   --code-highlight-color: rgba(255,255,0,0.5);
   --inverse-text-color: #1F4257;
   --inverse-background-color: #F97B64;
@@ -96,7 +96,6 @@ h1, h2, h3 {
 }
 .remark-code {
   font-size: var(--code-font-size);
-  text-align: left;
 }
 .remark-inline-code {
   font-size: var(--code-inline-font-size);

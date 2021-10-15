@@ -1,8 +1,7 @@
 ---
-title: "Day 4: Data Viz and R Markdown"
-subtitle: "Data Carpentries for Social Sciences"  
-institute: Leiden University & TU Delft
-date: '2021-07-08 *(Updated: `r Sys.Date()`)*'
+title: "Data visulisation with ggplot2"
+subtitle: "Data Carpentry: R for Social Sciences"  
+date: '2021-10-29 *(Updated: `r Sys.Date()`)*'
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
@@ -40,10 +39,21 @@ library(xaringanthemer)
 style_duo(
   primary_color = "#1F4257",
   secondary_color = "#F97B64",
-  text_bold_color = "#d4d640", 
+  text_bold_color = "#F97B64", 
   code_inline_color = "#29e6a4"
 )
 ```
+
+## About me
+
+`r emo::ji("wave")` Hi, I'm **Eirini Zormpa** (/iˈrini/)
+
+`r emo::ji("bird")` @eirini_zormpa
+
+`r emo::ji("graduate")` PhD at Max Planck Institute for Psycholinguistics
+
+`r emo::ji("briefcase")` Trainer on RDM and Open Science at TU Delft
+---
 
 class: center, middle, inverse
 
