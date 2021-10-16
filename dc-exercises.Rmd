@@ -66,65 +66,33 @@ class: center, middle
 
 ## Why ggplot2?
 
-...because these are 'base' plots
-
-.pull-left[
-```{r base-pl-1}
-plot(number_items ~ no_membrs, 
-     interviews_plotting, 
-     col = "blue")
-```
-]
-
-.pull-right[
-```{r base-pl-2}
-boxplot(rooms ~ village, 
-        interviews_plotting, 
-        col = c("blue", "green", "red"))
-```
-]
-
 ---
-class: center, middle
-
-...and these are ggplots `r emo::ji("sunglasses")`
 
 .pull-left[
-```{r ggplot-1}
-interviews_plotting %>% 
-   ggplot(aes(x = no_membrs, y = number_items, colour = village)) +
-      geom_count() +
-      scale_colour_viridis_d(alpha = 0.7) +
-      theme_minimal() + theme(text = element_text(size = 12)) +
-      labs(x = "Number of household members", y = "Number of items")
+
+Because these are 'base' plots...
+```{r base-plot}
+boxplot(
+  rooms ~ village, 
+  interviews_plotting, 
+  col = c("blue", "green", "red")
+  )
 ```
 ]
 
+--
+
 .pull-right[
-```{r ggplot-2}
-interviews_plotting %>%
-  ggplot(aes(x = village, y = rooms, fill = village)) +
-    geom_violin() +
-    scale_fill_viridis_d(alpha = 0.7) +
-    theme_minimal() + labs(x = "") +
-    theme(legend.position = "none", axis.text.x = element_text(size = 12))
+
+... and these are ggplots `r emo::ji("sunglasses")`
+```{r ggplot}
+interviews_plotting %>% ggplot(aes(x = village, y = rooms, fill = village)) +
+    geom_violin() + scale_fill_viridis_d(alpha = 0.7) +
+    theme_minimal() + labs(title = "Number of rooms by village", x = "", y = "") +
+    theme(legend.position = "none", axis.text = element_text(size = 12))
 ```
 ]
 
----
-class: center, middle
-
-.pull-left[
-<img src="./dc-exercises_files/figure-html/base-pl-1-1.png" width="80%"/>
-
-<img src="./dc-exercises_files/figure-html/base-pl-2-1.png" width="80%"/>
-]
-
-.pull-right[
-<img src="./dc-exercises_files/figure-html/ggplot-1-1.png" width="80%"/>
-
-<img src="./dc-exercises_files/figure-html/ggplot-2-1.png" width="80%"/>
-]
 
 ---
 class: center, middle
