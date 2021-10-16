@@ -24,6 +24,7 @@ knitr::opts_chunk$set(
   hiline = TRUE
 )
 library(tidyverse)
+library(viridisLite)
 library(here)
 interviews_plotting <- readr::read_csv(here("data", "interviews_plotting.csv"))
 percent_items <- interviews_plotting %>% 
@@ -53,6 +54,7 @@ style_duo(
 `r emo::ji("graduate")` PhD at Max Planck Institute for Psycholinguistics
 
 `r emo::ji("briefcase")` Trainer on RDM and Open Science at TU Delft
+
 ---
 
 class: center, middle, inverse
@@ -90,11 +92,11 @@ class: center, middle
 .pull-left[
 ```{r ggplot-1}
 interviews_plotting %>% 
-   ggplot(aes(x = no_membrs, y = number_items, color = village)) +
+   ggplot(aes(x = no_membrs, y = number_items, colour = village)) +
       geom_count() +
-      theme_bw() +
-      labs(x = "Number of items", 
-           y = "Number of members in a household")
+      scale_colour_viridis_d(alpha = 0.7) +
+      theme_minimal() + theme(text = element_text(size = 12)) +
+      labs(x = "Number of household members", y = "Number of items")
 ```
 ]
 
@@ -102,10 +104,10 @@ interviews_plotting %>%
 ```{r ggplot-2}
 interviews_plotting %>%
   ggplot(aes(x = village, y = rooms, fill = village)) +
-    geom_boxplot() +
-    theme_minimal() +
-    theme(legend.position = "none",
-        panel.grid.major.x = element_blank())
+    geom_violin() +
+    scale_fill_viridis_d(alpha = 0.7) +
+    theme_minimal() + labs(x = "") +
+    theme(legend.position = "none", axis.text.x = element_text(size = 12))
 ```
 ]
 
@@ -291,6 +293,7 @@ Which do you like best?
 `theme_grey`  
 `theme_light`
 ]
+
 ---
 class: center, middle, inverse
 
