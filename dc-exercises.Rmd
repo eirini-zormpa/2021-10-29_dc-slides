@@ -294,19 +294,13 @@ Which do you like best?
 ---
 class: center, middle, inverse
 
-## Exercise 4: Solution
+## Exercise 4: My preference
 
-```{r exercise-4-sol, eval=FALSE}
+```{r exercise-4-sol, eval = FALSE}
 percent_items %>%
     ggplot(aes(x = village, y = percent)) +
     geom_bar(stat = "identity", position = "dodge") +
     facet_wrap(~ items) +
-    theme_bw() + #<<
+    theme_minimal() + #<<
     theme(panel.grid = element_blank())
 ```
-
-
-<img src="https://media.giphy.com/media/43xU2PKxB9AUm5Z4C1/giphy.gif" align="center" height=300 />
-
----
-class: center, middle, inverse
