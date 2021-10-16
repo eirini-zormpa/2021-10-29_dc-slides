@@ -1,5 +1,5 @@
 ---
-title: "Data visulisation with ggplot2"
+title: "Data visualisation with ggplot2"
 subtitle: "Data Carpentry: R for Social Sciences"  
 date: '2021-10-29 *(Updated: `r Sys.Date()`)*'
 output:
@@ -23,9 +23,12 @@ knitr::opts_chunk$set(
   warning = FALSE,
   hiline = TRUE
 )
+
+library(knitr)
 library(tidyverse)
-library(viridisLite)
+library(showtext)
 library(here)
+
 interviews_plotting <- readr::read_csv(here("data", "interviews_plotting.csv"))
 percent_items <- interviews_plotting %>% 
     group_by(village) %>%
@@ -55,11 +58,110 @@ style_duo(
 
 `r emo::ji("briefcase")` Trainer on RDM and Open Science at TU Delft
 
+
 ---
 
 class: center, middle, inverse
 
 ## Data Visualisation
+
+---
+
+## Getting started
+
+> Whenever we visulise data, we take data values and convert them in a systematic and logical way into the visual elements that make up the final graphic. [...] The key insight is the following: All data visualisations map data values into quantifiable featrures of the resulting graphic. We refer to these features as **aesthetics**.
+
+.pull-right[
+from Claus Wilke's [*Fundamentals of Data Visualization*](https://clauswilke.com/dataviz)
+]
+
+--
+
+**Commonly used aesthetics are:**
+
+- position (*x* and *y* coordinates),
+- colour
+- size
+- shape
+- line type
+
+---
+class: middle
+
+## Find the blue dot `r emo::ji("sparkles")`
+
+
+```{r create-data, echo = FALSE}
+plot1 <- data.frame(x = rnorm(100, 10, 1),
+                    y = rnorm(100, 10, 1),
+                    z = c(rep("a", 99), "b"))
+
+plot2 <- data.frame(x = rnorm(100, 10, 1),
+                    y = rnorm(100, 10, 1),
+                    z = c(rep("b", 99), "a"))
+
+plot3 <- data.frame(x = rnorm(100, 10, 1),
+                    y = rnorm(100, 10, 1),
+                    z = c(rep("a", 33), rep("b", 66), rep("a", 1)),
+                    aa = c(rep("a", 66), rep("b", 34)))
+
+
+```
+
+
+
+```{r blue-dot1, echo = FALSE, fig.width=9, fig.height=5, fig.retina=3}
+plot1 %>%
+  ggplot(aes(x = x, y = y, colour = z)) +
+  geom_point(size = 2.5) +
+  scale_colour_manual(values=c("#E69F00", "#56B4E9")) +
+  labs(x = "", y = "", title = "Colour only, N = 100") +
+  theme(legend.position = "none",
+        plot.title = element_text(size=22),
+        axis.text = element_blank(),
+        axis.ticks = element_blank())
+
+```
+
+from Kieran Healy's [*Data Visualization: A practical introduction*](https://socviz.co/)
+
+---
+class: middle
+
+## Find the blue dot `r emo::ji("fireworks")`
+
+
+```{r blue-dot2, echo = FALSE, fig.width=9, fig.height=5, fig.retina=3}
+plot2 %>%
+  ggplot(aes(x = x, y = y, shape = z)) +
+  geom_point(colour = "#56B4E9", size = 2.5) +
+  labs(x = "", y = "", title = "Shape only, N = 100") +
+  theme(legend.position = "none",
+        plot.title = element_text(size=22),
+        axis.text = element_blank(),
+        axis.ticks = element_blank())
+```
+
+from Kieran Healy's [*Data Visualization: A practical introduction*](https://socviz.co/)
+
+---
+class: middle
+
+## Find the blue dot `r emo::ji("rocket")`
+
+```{r blue-dot3, echo = FALSE, fig.width=9, fig.height=5, fig.retina=3}
+plot3 %>%
+  ggplot(aes(x = x, y = y, shape = z, colour = aa)) +
+  geom_point(size = 2.5) +
+  scale_colour_manual(values=c("#E69F00", "#56B4E9")) +
+  labs(x = "", y = "", title = "Colour and Shape, N = 100") +
+  theme(plot.title = element_text(size=22),
+        legend.position = "none",
+        axis.text = element_blank(),
+        axis.ticks = element_blank())
+```
+
+from Kieran Healy's [*Data Visualization: A practical introduction*](https://socviz.co/)
 
 ---
 class: center, middle
