@@ -70,7 +70,7 @@ class: center, middle, inverse
 
 ## Getting started
 
-> Whenever we visulise data, we take data values and convert them in a systematic and logical way into the visual elements that make up the final graphic. [...] The key insight is the following: All data visualisations map data values into quantifiable featrures of the resulting graphic. We refer to these features as **aesthetics**.
+> Whenever we visualise data, we take data values and convert them in a systematic and logical way into the visual elements that make up the final graphic. [...] The key insight is the following: All data visualisations map data values into quantifiable features of the resulting graphic. We refer to these features as **aesthetics**.
 
 .pull-right[
 from Claus Wilke's [*Fundamentals of Data Visualization*](https://clauswilke.com/dataviz)
