@@ -24,9 +24,10 @@ knitr::opts_chunk$set(
   hiline = TRUE
 )
 
-library(knitr)
 library(tidyverse)
-library(showtext)
+library(knitr)
+library(viridisLite)
+library(hexbin)
 library(here)
 
 interviews_plotting <- readr::read_csv(here("data", "interviews_plotting.csv"))
@@ -88,7 +89,7 @@ from Claus Wilke's [*Fundamentals of Data Visualization*](https://clauswilke.com
 ---
 class: middle
 
-## Find the blue dot `r emo::ji("sparkles")`
+## Find the green dot `r emo::ji("baby")`
 
 
 ```{r create-data, echo = FALSE}
@@ -114,7 +115,7 @@ plot3 <- data.frame(x = rnorm(100, 10, 1),
 plot1 %>%
   ggplot(aes(x = x, y = y, colour = z)) +
   geom_point(size = 2.5) +
-  scale_colour_manual(values=c("#E69F00", "#56B4E9")) +
+  scale_colour_manual(values=c("tomato", "#7aeb7a")) +
   labs(x = "", y = "", title = "Colour only, N = 100") +
   theme(legend.position = "none",
         plot.title = element_text(size=22),
@@ -128,13 +129,13 @@ from Kieran Healy's [*Data Visualization: A practical introduction*](https://soc
 ---
 class: middle
 
-## Find the blue dot `r emo::ji("fireworks")`
+## Find the green dot `r emo::ji("graduate")`
 
 
 ```{r blue-dot2, echo = FALSE, fig.width=9, fig.height=5, fig.retina=3}
 plot2 %>%
   ggplot(aes(x = x, y = y, shape = z)) +
-  geom_point(colour = "#56B4E9", size = 2.5) +
+  geom_point(colour = "#7aeb7a", size = 2.5) +
   labs(x = "", y = "", title = "Shape only, N = 100") +
   theme(legend.position = "none",
         plot.title = element_text(size=22),
@@ -147,13 +148,13 @@ from Kieran Healy's [*Data Visualization: A practical introduction*](https://soc
 ---
 class: middle
 
-## Find the blue dot `r emo::ji("rocket")`
+## Find the green dot `r emo::ji("alien")`
 
 ```{r blue-dot3, echo = FALSE, fig.width=9, fig.height=5, fig.retina=3}
 plot3 %>%
   ggplot(aes(x = x, y = y, shape = z, colour = aa)) +
   geom_point(size = 2.5) +
-  scale_colour_manual(values=c("#E69F00", "#56B4E9")) +
+  scale_colour_manual(values=c("tomato", "#7aeb7a")) +
   labs(x = "", y = "", title = "Colour and Shape, N = 100") +
   theme(plot.title = element_text(size=22),
         legend.position = "none",
@@ -162,6 +163,48 @@ plot3 %>%
 ```
 
 from Kieran Healy's [*Data Visualization: A practical introduction*](https://socviz.co/)
+
+
+---
+
+## Colour considerations
+
+In the previous game, people with the most common type of colour-blindness would have struggled to perceive the colour distinction!
+
+![](images/colour-blindness.png)
+
+---
+
+## Viridis palettes
+
+
+.pull-left[
+
+Are relatively colourblind-friendly...
+
+```{r viridis-palettes, echo = FALSE, out.height="50%"}
+include_graphics("images/viridis-palettes.png")
+```
+]
+
+--
+
+.pull-right[
+
+... and they're pretty `r emo::ji("smiling cat face with heart-eyes")`
+
+```{r viridis-plot, echo = FALSE}
+dat <- data.frame(x = rnorm(10000), y = rnorm(10000))
+
+ggplot(dat, aes(x = x, y = y)) +
+  geom_hex() + coord_fixed() +
+  scale_fill_gradientn(colours = viridis(256, option = "D")) +
+  labs(x = "", y = "")
+```
+]
+
+from the [`viridisLite` site](https://sjmgarnier.github.io/viridisLite/reference/viridis.html) by Simon Garnier
+
 
 ---
 class: center, middle
@@ -173,7 +216,7 @@ class: center, middle
 .pull-left[
 
 Because these are 'base' plots...
-```{r base-plot}
+```{r base-plot, fig.retina=3}
 boxplot(
   rooms ~ village, 
   interviews_plotting, 
@@ -187,7 +230,7 @@ boxplot(
 .pull-right[
 
 ... and these are ggplots `r emo::ji("sunglasses")`
-```{r ggplot}
+```{r ggplot, fig.retina=3}
 interviews_plotting %>% ggplot(aes(x = village, y = rooms, fill = village)) +
     geom_violin() + scale_fill_viridis_d(alpha = 0.7) +
     theme_minimal() + labs(title = "Number of rooms by village", x = "", y = "") +
