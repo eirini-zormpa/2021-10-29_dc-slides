@@ -1,0 +1,177 @@
+---
+title: "Notes"
+author: "Eirini Zormpa"
+date: "18/10/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## To do
+
+- [] check that the code works with whatever dataset was created the previous day
+- [] send participants the dataset that we will use?
+
+## Schedule
+
+- 9:00 Introduction - ask what this will be. Can we already check that everyone has the dataset for the data viz bit?
+- 9:15 Introduction from me
+- 9:30 Setup, Plotting with ggplot2, Building plots iteratively, Exercise 1, Boxplot, Exercise 2
+- 10:30 Break
+- 10:45 Barplots, Exercise 3, Adding labels and titles, Faceting, ggplot2 themes, Exercise 4, Customisation
+- 11:45 Break
+
+## Script and code
+
+
+### Setup
+
+Okay so let's start with loading all the packages that we will need.
+As before, we need the tidyverse package, which as I mentioned, also includes the ggplot2 package.
+We'll also need the here package, which makes it easier to work with relative paths.
+
+```{r load-packaages}
+library(tidyverse)
+library(here)
+
+# install.packages("viridisLite")
+library(viridisLite)
+```
+
+
+And then we'll read in the data we created yesterday for the visualisation.
+
+```{r read-data}
+interviews_plotting <- read_csv(here("data", "interviews_plotting.csv"))
+```
+
+If you weren't able to create the dataset yesterday, you can use this code
+
+```{r}
+interviews <- read_csv(here("data", "SAFI_clean.csv"))
+
+interviews_plotting_back_up <- interviews %>%
+  separate_rows(items_owned, sep = ";") %>%
+  replace_na(list(items_owned = "no_listed_items")) %>%
+  mutate(items_owned_logical = TRUE) %>%
+  pivot_wider(names_from = items_owned,
+              values_from = items_owned_logical,
+              values_fill = list(items_owned_logical = FALSE)) %>%
+  separate_rows(months_lack_food, sep = ";") %>%
+  mutate(months_lack_food_logical = TRUE) %>%
+  pivot_wider(names_from = months_lack_food,
+              values_from = months_lack_food_logical,
+              values_fill = list(months_lack_food_logical = FALSE)) %>%
+  mutate(number_months_lack_food = rowSums(select(., Jan:May))) %>%
+  mutate(number_items = rowSums(select(., bicycle:car)))
+```
+
+### Plotting with ggplot2!
+
+Anything that you put in the ggplot() function can be seen by any geom layers that you add, i.e. these are *universal* plot settings. This includes the x- and y-axis mappings.
+
+Building plots with ggplot 2 is an iterative process. We start by defining the dataset, laying out the axes and other aesthetics we want to use, and choose a geom. Then we inspect the plot to see if it works. For example, here we should have 131 observations, each point being an observation. But I don't think we have 131 points!
+
+```{r}
+interviews_plotting %>%
+  ggplot(aes(x = no_membrs, y = number_items)) +
+  geom_point(alpha = 0.5)
+```
+
+```{r}
+interviews_plotting %>%
+  ggplot(aes(x = no_membrs, y = number_items)) +
+  geom_jitter(height = 0.2, width = 0.2, colour = "blue")
+```
+
+
+```{r}
+interviews_plotting %>%
+  ggplot(aes(x = no_membrs, y = number_items, colour = village)) +
+  geom_jitter(height = 0.2, width = 0.2)
+```
+
+
+```{r}
+interviews_plotting %>%
+  ggplot(aes(x = no_membrs, y = number_items, colour = village)) +
+  geom_count()
+```
+
+## Boxplot
+
+```{r}
+interviews_plotting %>%
+  ggplot(aes(x = respondent_wall_type, y = rooms)) +
+  geom_jitter(height = 0.2, width = 0.2, colour = "tomato") +
+  geom_boxplot(alpha = 0)
+  
+```
+
+## Barplot
+
+```{r}
+library(viridisLite)
+
+interviews_plotting %>%
+  ggplot(aes(x = respondent_wall_type, fill = village)) +
+  geom_bar(position = "dodge") +
+  scale_fill_viridis_d()
+```
+
+```{r}
+percent_wall_type <- interviews_plotting %>%
+  count(village, respondent_wall_type) %>%
+  group_by(village) %>%
+  mutate(percent = n/sum(n) * 100) %>%
+  ungroup()
+```
+
+- Make a point of removing cement
+- Make a point of putting village in the x axis
+
+```{r}
+percent_wall_type %>%
+  ggplot(aes(x = village, y = percent, fill = respondent_wall_type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d()
+```
+
+## Adding titles and labels
+
+```{r}
+percent_wall_type %>%
+  ggplot(aes(x = village, y = percent, fill = respondent_wall_type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  labs(title = "Wall type by village",
+       fill = "",
+       y = "Percent",
+       x = "")
+```
+
+```{r}
+percent_wall_type %>%
+  ggplot(aes(x = respondent_wall_type, y = percent)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  labs(title = "Wall type by village",
+       fill = "",
+       y = "Percent",
+       x = "") +
+  facet_wrap(~village)
+```
+
+```{r}
+percent_wall_type %>%
+  ggplot(aes(x = village, y = percent, fill = respondent_wall_type)) +
+  geom_bar(stat = "identity", position = "dodge") +
+  scale_fill_viridis_d() +
+  labs(title = "Wall type by village",
+       fill = "",
+       y = "Percent",
+       x = "") +
+  theme_bw()
+```
