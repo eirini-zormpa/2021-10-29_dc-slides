@@ -431,11 +431,13 @@ percent_items %>%
 
 ## This is just the beginning!
 
-`ggplot2` and compatible packages give you a huge amount of flexibility to create **exactly** the graph you want!
+`ggplot2` and compatible packages give you a huge amount of flexibility to create *exactly* the graph you want!
 
 You can explore packages that give you access to:
-- add beautiful palettes (`ghibli`, `wesanderson`),
-- new themes (`hrbrthemes`)
-- additional fonts (`extrafont`)
-- animated graphs (`gganimate`)
+- beautiful palettes (e.g. `ghibli`, `wesanderson`),
+- new themes (e.g. `hrbrthemes`)
+- additional fonts (e.g. `extrafont`)
+- animated graphs (e.g. `gganimate`)
 - and so much more!
+
+There are more resources for you to explore in the Google Doc, for example the excellent **Data visualization: A practical introduction** by Kieran Healy ([link](https://socviz.co/)) `r emo::ji("sparkles")`
