@@ -14,7 +14,7 @@ class: center, middle, inverse, title-slide
 
 # Data visualisation with ggplot2
 ## Data Carpentry: R for Social Sciences
-### 2021-10-29 <em>(Updated: 2021-10-26)</em>
+### 2021-10-29 <em>(Updated: 2021-10-28)</em>
 
 ---
 
@@ -27,7 +27,7 @@ class: center, middle, inverse, title-slide
 
 .pull-left[
 
-👨‍🎓 PhD at MPI for Psycholinguistics
+👩‍🎓 PhD at MPI for Psycholinguistics
 ]
 
 .pull-right[
@@ -150,7 +150,7 @@ from Kieran Healy's [*Data Visualization: A practical introduction*](https://soc
 ---
 class: middle
 
-## Find the green dot 👩‍🎓
+## Find the green dot 👨‍🎓
 
 
 &lt;img src="dc-exercises_files/figure-html/blue-dot2-1.png" width="100%" /&gt;
@@ -209,7 +209,7 @@ class: center, middle
 
 ## Exercise 1
 
-🕣 **10 mins**
+🕐 **10 mins**
 
 Create a scatter plot of `rooms` by `village` with the `respondant_wall_type`
 showing in different colours. 
@@ -218,7 +218,7 @@ Does this seem like a good way to display the relationship between these variabl
 
 What other kinds of plots might you use to show this type of data?
 
-<div class="countdown" id="timer_61780635" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_617ac603" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -230,9 +230,10 @@ class: center, middle, inverse
 
 ```r
 interviews_plotting %&gt;%
-    ggplot(aes(x = village, y = rooms)) +
-    geom_jitter(aes(color = respondent_wall_type),
-		    alpha = 0.5, width = 0.2, height = 0.2)
+  ggplot(aes(x = village, y = rooms)) +
+  geom_jitter(aes(colour = respondent_wall_type),
+              alpha = 0.5, width = 0.2, height = 0.2) +
+  scale_colour_viridis_d()
 ```
 
 &lt;img src="dc-exercises_files/figure-html/exercise-1-sol-1.png" width="100%" /&gt;
@@ -246,7 +247,7 @@ class: center, middle
 
 ## Exercise 2
 
-🕙 **5 mins**
+🕚 **5 mins**
 
 Boxplots are useful summaries, but hide the shape of the distribution. For example,
 if the distribution is bimodal, we would not see it in a boxplot.
@@ -254,7 +255,7 @@ if the distribution is bimodal, we would not see it in a boxplot.
 Replace the box plot with a violin plot  
 see `geom_violin()`
 
-<div class="countdown" id="timer_617805cb" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_617ac5bf" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -268,7 +269,7 @@ class: center, middle, inverse
 interviews_plotting %&gt;%
   ggplot(aes(x = respondent_wall_type, y = rooms)) +
   geom_violin(alpha = 0) +
-  geom_jitter(alpha = 0.5, color = "tomato")
+  geom_jitter(alpha = 0.5, colour = "tomato")
 ```
 
 &lt;img src="dc-exercises_files/figure-html/exercise-2-sol-1.png" width="100%" /&gt;
@@ -278,7 +279,7 @@ class: center, middle
 
 ## Exercise 3
 
-🕓 **10 mins**
+🕕 **10 mins**
 
 Create a bar plot showing the proportion of respondents in each village who are 
 or are not part of an irrigation association (`memb_assoc`). 
@@ -287,13 +288,28 @@ Include only respondents who answered that question in the calculations and plot
 
 Which village had the lowest proportion of respondents in an irrigation association?
 
-<div class="countdown" id="timer_61780627" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_617ac527" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">10</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
---
+---
 
-### Hint
+class: center, middle
+
+## Exercise 3
+
+🕤 **10 mins**
+
+Create a bar plot showing the proportion of respondents in each village who are 
+or are not part of an irrigation association (`memb_assoc`). 
+
+Include only respondents who answered that question in the calculations and plot.
+
+Which village had the lowest proportion of respondents in an irrigation association?
+
+<div class="countdown" id="timer_617ac37e" style="right:0;bottom:0;" data-warnwhen="0">
+<code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
+</div>
 
 
 ```r
@@ -331,14 +347,14 @@ class: center, middle
 
 ## Exercise 4
 
-🕘 **5 mins**
+🕑 **5 mins**
 
 Experiment with at least two different themes. Build the previous plot using each
 of those themes. 
 
 Which do you like best?
 
-<div class="countdown" id="timer_6178040f" style="right:0;bottom:0;" data-warnwhen="0">
+<div class="countdown" id="timer_617ac4fa" style="right:0;bottom:0;" data-warnwhen="0">
 <code class="countdown-time"><span class="countdown-digits minutes">05</span><span class="countdown-digits colon">:</span><span class="countdown-digits seconds">00</span></code>
 </div>
 
@@ -368,7 +384,7 @@ percent_items %&gt;%
     ggplot(aes(x = village, y = percent)) +
     geom_bar(stat = "identity", position = "dodge") +
     facet_wrap(~ items) +
-*   theme_minimal() +
+*   theme_bw() +
     theme(panel.grid = element_blank())
 ```
 
@@ -378,7 +394,7 @@ percent_items %&gt;%
 
 `ggplot2` and compatible packages give you a huge amount of flexibility to create *exactly* the graph you want!
 
-You can explore packages that give you access to:
+You can explore packages that let you play around with:
 - beautiful palettes (e.g. `ghibli`, `wesanderson`),
 - new themes (e.g. `hrbrthemes`)
 - additional fonts (e.g. `extrafont`)
