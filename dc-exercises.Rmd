@@ -1,7 +1,7 @@
 ---
 title: "Data visualisation with ggplot2"
 subtitle: "Data Carpentry: R for Social Sciences"  
-date: '2021-10-29 *(Updated: `r Sys.Date()`)*'
+date: '2022-02-25 *(Updated: `r Sys.Date()`)*'
 output:
   xaringan::moon_reader:
     css: xaringan-themer.css
