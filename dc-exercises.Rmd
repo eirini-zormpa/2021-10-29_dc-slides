@@ -285,7 +285,7 @@ class: center, middle
 
 `r emo::ji("clock")` **10 mins**
 
-Create a scatter plot of `rooms` by `village` with the `respondant_wall_type`
+Create a scatter plot of `rooms` by `village` with the `respondent_wall_type`
 showing in different colours. 
 
 Does this seem like a good way to display the relationship between these variables?
@@ -437,8 +437,7 @@ percent_items %>%
     ggplot(aes(x = village, y = percent)) +
     geom_bar(stat = "identity", position = "dodge") +
     facet_wrap(~ items) +
-    theme_bw() + #<<
-    theme(panel.border = element_blank())
+    theme_minimal()
 ```
 
 ---
